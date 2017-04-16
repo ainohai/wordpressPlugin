@@ -13,6 +13,7 @@ class KlabBaseFunctionalities_publication extends klabCustomPostType
     protected static function createPostType()
     {
         $labels = array(
+        	'show_in_rest' => true,
             'name'               => _x( 'Publications', 'post type general name', 'klab' ),
             'singular_name'      => _x( 'Publication', 'post type singular name', 'klab' ),
             'menu_name'          => _x( 'Publications', 'admin menu', 'klab' ),
@@ -30,17 +31,20 @@ class KlabBaseFunctionalities_publication extends klabCustomPostType
         );
 
 
-        $supports = array( 'title', 'page-attributes');
+
+        $supports = array( 'title','authors', 'page-attributes');
         $titleHint = 'Insert publication title';
 
         parent::createPostTypeUsingConstructor(static::SLUG, $labels, $supports, $titleHint);
 
     }
 
+
     protected static function setTaxonomies() {
         return;
     }
     protected static function createMetaboxes() {
+    	 
         /*"25081398": {
             "uid": "25081398",
             "pubdate": "2014 Jul-Aug",
@@ -247,7 +251,43 @@ class KlabBaseFunctionalities_publication extends klabCustomPostType
 
         parent::createMetaBox($publicationDetailsMetaboxProps, STATIC::SLUG);
         parent::createMetaBox($abstractMetaBoxProps, STATIC::SLUG);
+        $addBoxes = 'add_meta_boxes_'.STATIC::SLUG;
+        add_action('edit_form_top', 'KlabBaseFunctionalities_publication::init_fetch_publications');
+        
+        add_action( 'rest_api_init', function(){
+        	$array = array("authors", "source", "uid", "pubdate", "volume", "issue", "pages", "fulljournalname", "booktitle", "medium", "edition", "publisherlocation", "publishername");
+        	 
+        	foreach ($array as $fieldName) {
+        		register_rest_field( 'klab_publication',
+        				'klab_publication_'.$fieldName,
+        				array(
+        						'get_callback'    => function($object, $field_name ){
+        						return get_post_meta( $object[ 'id' ], $field_name, true );
+        						},
+        						'update_callback' => function($value, $object, $field_name ){
+        						return update_post_meta( $object->ID, $field_name, $value );
+        						},
+        						'schema'          => null,
+        						)
+        				);
+        	}
+        });
 
-        return;
     }
+    
+
+    public static function init_fetch_publications(){
+    	
+    	
+    	
+    	wp_enqueue_script( 'session', plugins_url( '/klabBaseFunctionalities-admin.js', __FILE__ ), array('jquery'), '1.0', true );
+	   	wp_localize_script( 'session', 'session', array(
+    			'current_user_id' => get_current_user_id(),
+    			'root' => esc_url_raw( rest_url() ),
+    			'nonce' => wp_create_nonce( 'wp_rest' ),
+    	));
+
+     	echo '<p onclick="fetch_publications_by_auth()">Hae julkaisuja</p>';
+    }
+    
 }
