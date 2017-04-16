@@ -138,6 +138,7 @@ class KlabBaseFunctionalities {
         require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/customPostTypes/class-klabBaseFunctionalities_labmember.php';
         require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/customPostTypes/class-klabBaseFunctionalities_researchTopic.php';
         require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/customPostTypes/class-klabBaseFunctionalities_labPicSlider.php';
+        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/customPostTypes/class-klabBaseFunctionalities_intraLinks.php';
 
 
         /* customizing metaboxes for page templates */
@@ -212,6 +213,7 @@ class KlabBaseFunctionalities {
         KlabBaseFunctionalities_lab_member::initiate();
         KlabBaseFunctionalities_research_topic::initiate();
         KlabBaseFunctionalities_lab_slideshow::initiate();
+        KlabBaseFunctionalities_intraLinks::initiate();
 
         PageTemplateUtil::addTemplateMetaboxes();
 

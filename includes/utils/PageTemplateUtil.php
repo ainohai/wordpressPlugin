@@ -15,21 +15,6 @@ class PageTemplateUtil
 
     public static function addTemplateMetaboxes() {
 
-            $bioDetailsMetaBoxProps = (object)[
-                'metaboxTitle' => 'Bio details',
-                'metaboxId' => 'bioDetails',
-                'nonceName' => 'bioDetailsNonce',
-                'inputFields' =>
-                    array(
-                        (object)[
-                            'inputAttributes' => (object)[
-                                'type' => 'textarea',
-                            ],
-                            'inputId' => 'bioDetails',
-                            'inputLabelText' => 'Bio details'
-                        ]
-                    )
-            ];
             $bioCVMetaBoxProps = (object)[
                 'metaboxTitle' => 'CV',
                 'metaboxId' => 'CV',
@@ -40,14 +25,11 @@ class PageTemplateUtil
                             'inputAttributes' => (object)[
                                 'type' => 'textarea',
                             ],
-                            'inputId' => 'CV',
+                            'inputId' => 'cv',
                             'inputLabelText' => 'CV'
                         ]
                     )
             ];
-
-            $metaBoxConstructor = new Klab_metaBoxConstructor($bioDetailsMetaBoxProps, static::POST_TYPE_NAME, static::PAGE_TEMPLATE_NAME);
-            $metaBoxConstructor->createAndSaveMetas();
 
             $metaBoxConstructor = new Klab_metaBoxConstructor($bioCVMetaBoxProps, static::POST_TYPE_NAME, static::PAGE_TEMPLATE_NAME);
             $metaBoxConstructor->createAndSaveMetas();
@@ -60,7 +42,7 @@ class PageTemplateUtil
         $currentPageTemplate = get_post_meta( $post->ID, '_wp_page_template', true );
         if(!empty($post) && STATIC::POST_TYPE_NAME === $post->post_type && $currentPageTemplate === STATIC::PAGE_TEMPLATE_NAME) {
 
-            echo '<div class="editorTitle"><h4>Short quote:</h4></div>';
+            echo '<div class="editorTitle"><h3>Bio:</h3></div>';
         }
     }
 

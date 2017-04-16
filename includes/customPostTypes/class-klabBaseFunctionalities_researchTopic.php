@@ -29,7 +29,7 @@ class KlabBaseFunctionalities_research_topic extends klabCustomPostType
             'not_found'          => __( 'No research topic found.', 'klab' ),
             'not_found_in_trash' => __( 'No research topic found in Trash.', 'klab' )
         );
-        $supports = array( 'title', 'editor', 'thumbnail');
+        $supports = array( 'title', 'editor', 'thumbnail', 'page-attributes');
         parent::createPostTypeUsingConstructor(static::SLUG, $labels, $supports, static::POST_TITLE_HINT);
 
         add_action( 'edit_form_after_title', 'KlabBaseFunctionalities_research_topic::klab_researchTopic_topicForEditor_cb' );
@@ -52,7 +52,7 @@ class KlabBaseFunctionalities_research_topic extends klabCustomPostType
                         'inputAttributes' => (object) [
                             'type' => 'textarea',
                         ],
-                        'inputId' => 'klabMemberDescription',
+                        'inputId' => 'klabResearchDescription',
                         'inputLabelText' => 'Description'
                     ]
                 )

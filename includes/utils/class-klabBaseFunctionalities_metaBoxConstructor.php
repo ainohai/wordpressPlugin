@@ -120,9 +120,10 @@ add_action( 'edit_form_after_title', 'my_run_excerpt_meta_box' );
         }
         $post_id = $post->ID;
         $currentPageTemplate = get_post_meta( $post->ID, '_wp_page_template', true );
+        error_log("saving post meta");
         if ($this ->postTypeName === 'page'
-            || ($this->pageTemplateName != null
-            && $currentPageTemplate !== $this->pageTemplateName)) {
+            && $this->pageTemplateName != null
+            && $currentPageTemplate != $this->pageTemplateName) {
 
             return;
         }
@@ -152,7 +153,8 @@ add_action( 'edit_form_after_title', 'my_run_excerpt_meta_box' );
         // Checks for input and sanitizes/saves if needed
         if( isset( $_POST[$metaId] ) ) {
 
-            update_post_meta( $post_id, $metaId, sanitize_text_field( $_POST[$metaId] ) );
+            //update_post_meta( $post_id, $metaId, sanitize_text_field( $_POST[$metaId] ) );
+            update_post_meta( $post_id, $metaId, stripslashes( $_POST[$metaId] ) );
         }
 
     }

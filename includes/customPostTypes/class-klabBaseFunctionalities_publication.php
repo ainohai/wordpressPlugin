@@ -30,7 +30,7 @@ class KlabBaseFunctionalities_publication extends klabCustomPostType
         );
 
 
-        $supports = array( 'title');
+        $supports = array( 'title', 'page-attributes');
         $titleHint = 'Insert publication title';
 
         parent::createPostTypeUsingConstructor(static::SLUG, $labels, $supports, $titleHint);
@@ -151,6 +151,13 @@ class KlabBaseFunctionalities_publication extends klabCustomPostType
                     (object) [
                         'inputId' => 'authors',
                         'inputLabelText' => 'Authors',
+                        'inputAttributes' => (object) [
+                            'type' => 'text',
+                        ]
+                    ],
+                    (object) [
+                        'inputId' => 'publicationDetails',
+                        'inputLabelText' => 'Publication details',
                         'inputAttributes' => (object) [
                             'type' => 'text',
                         ]

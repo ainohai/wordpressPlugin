@@ -27,7 +27,7 @@ class KlabBaseFunctionalities_news extends klabCustomPostType
             'not_found_in_trash' => __( 'No news found in Trash.', 'klab' )
         );
         $postConstructor = new KlabBaseFunctionalities_CustomPostTypeConstructor('klab_news');
-        $postConstructor->initiateUsingDefaultArgs('klab_news', $labels);
+        $postConstructor->initiateUsingDefaultArgs('klab_news', $labels, array('title', 'editor', 'thumbnail', 'page-attributes'));
     }
 
     protected static function setTaxonomies() {

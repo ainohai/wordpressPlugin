@@ -30,7 +30,7 @@ class KlabBaseFunctionalities_lab_member extends klabCustomPostType
             'not_found_in_trash' => __( 'No lab members found in Trash.', 'klab' )
         );
 
-        $supports = array( 'title', 'thumbnail');
+        $supports = array( 'title', 'thumbnail', 'page-attributes');
         parent::createPostTypeUsingConstructor(static::SLUG, $labels, $supports, static::POST_TITLE_HINT, null);
 
     }
@@ -100,7 +100,7 @@ class KlabBaseFunctionalities_lab_member extends klabCustomPostType
             'menu_name' => __('Lab Member Categories'),
         );
 
-        register_taxonomy('topics', 'klab_lab_member', array(
+        register_taxonomy('labMemberPosition', 'klab_lab_member', array(
             'hierarchical' => true,
             'labels' => $labels,
             'show_ui' => true,

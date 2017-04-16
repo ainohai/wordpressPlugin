@@ -30,7 +30,7 @@ class KlabBaseFunctionalities_lab_slideshow extends klabCustomPostType
             'not_found_in_trash' => __( 'No slideshow pics found in Trash.', 'klab' )
         );
 
-        $supports = array( 'title', 'thumbnail');
+        $supports = array( 'title', 'thumbnail', 'page-attributes');
         parent::createPostTypeUsingConstructor(static::SLUG, $labels, $supports, static::POST_TITLE_HINT, null);
 
     }
