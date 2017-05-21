@@ -53,6 +53,10 @@ class metaBoxUtil
         if (strtolower($inputObject->inputAttributes->type === 'textarea')) {
             STATIC::echoTextAreaMetaBox ($post, $postMetaId, $attributes);
         }
+        else if (strtolower($inputObject->inputAttributes->type === 'checkbox')) {
+            STATIC::echoCheckBoxMetaBox($post, $postMetaId, $inputTitle, $attributes);
+        }
+
         else {
             STATIC::echoTextMetaBox ($post, $postMetaId, $inputTitle, $attributes);
         }
@@ -77,6 +81,17 @@ class metaBoxUtil
         $postMeta = get_post_meta( $post->ID );
         $inputValue = isset ( $postMeta[$postMetaId] )  ? ($postMeta[$postMetaId][0]) : "";
         wp_editor( $inputValue, $postMetaId, $attributes );
+    }
+
+    public static function echoCheckBoxMetaBox ($post, $postMetaId, $inputTitle, $attributes) {
+        $postMeta = get_post_meta( $post->ID );
+        echo '<p>';
+        echo '<input name="'. $postMetaId .'" id="'. $postMetaId .'" type ="checkbox"' ;
+        echo (isset($postMeta[$postMetaId]) && $postMeta[$postMetaId] == true) ? "checked" : ""  ;
+        echo ' />';
+        echo $inputTitle;
+        echo '</p>';
+
     }
 
 }

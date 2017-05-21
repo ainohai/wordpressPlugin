@@ -8,7 +8,7 @@
  */
 class KlabBaseFunctionalities_news extends klabCustomPostType
 {
-    protected static function createPostType()
+    protected function createPostType()
     {
         $labels = array(
             'name'               => _x( 'News', 'post type general name', 'klab' ),
@@ -30,10 +30,10 @@ class KlabBaseFunctionalities_news extends klabCustomPostType
         $postConstructor->initiateUsingDefaultArgs('klab_news', $labels, array('title', 'editor', 'thumbnail', 'page-attributes'));
     }
 
-    protected static function setTaxonomies() {
+    protected function setTaxonomies() {
         return;
     }
-    protected static function createMetaboxes() {
+    protected function createMetaboxes() {
         return;
     }
 }

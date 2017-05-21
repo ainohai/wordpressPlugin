@@ -73,9 +73,10 @@ class KlabBaseFunctionalities_Admin {
 		 * class.
 		 */
 
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/klabBaseFunctionalities-admin.css', array(), $this->version, 'all' );
+		wp_enqueue_style( 'remodal/css',  plugin_dir_url( __FILE__ ) . '../bower_components/remodal/dist/remodal.css', array() );
+        wp_enqueue_style( 'remodal-default-theme/css',  plugin_dir_url( __FILE__ ) . '../bower_components/remodal/dist/remodal-default-theme.css', array() );
 
-	}
+    }
 
 	/**
 	 * Register the JavaScript for the admin area.
@@ -97,11 +98,74 @@ class KlabBaseFunctionalities_Admin {
 		 */
 
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/klabBaseFunctionalities-admin.js', array( 'jquery' ), $this->version, false );
+        wp_localize_script( $this->plugin_name, 'session', array(
+            'current_user_id' => get_current_user_id(),
+            'root' => esc_url_raw( rest_url() ),
+            'nonce' => wp_create_nonce( 'wp_rest' ),
+        ));
+        wp_enqueue_script( 'remodal/js',  plugin_dir_url( __FILE__ ) . '../bower_components/remodal/dist/remodal.min.js', array( 'jquery' ), $this->version, false );
 
-	}
+        //echo plugin_dir_url( __FILE__ ) . '../bower_components/remodal/dist/remodal.min.js';
+
+    }
 
 	public function remove_top_level_menus () {
         remove_menu_page( 'edit.php' );                   //Posts
         remove_menu_page( 'edit-comments.php' );          //Comments
     }
+
+    public function init_fetch_publications(){
+
+        //wp_enqueue_script( 'session', plugins_url( '/klabBaseFunctionalities-admin.js', __FILE__ ), array('jquery'), '1.0', true );
+        /*wp_localize_script( 'session', 'session', array(
+            'current_user_id' => get_current_user_id(),
+            'root' => esc_url_raw( rest_url() ),
+            'nonce' => wp_create_nonce( 'wp_rest' ),
+        ));
+
+        echo '<p onclick="fetch_publications_by_auth()">Hae julkaisuja</p>';*/
+    }
+
+    public function init_pub_rest_api(){
+        $array = array("authors", "source", "uid", "pubdate", "volume", "issue", "pages", "fulljournalname", "booktitle", "medium", "edition", "publisherlocation", "publishername");
+
+        foreach ($array as $fieldName) {
+            register_rest_field( 'klab_publication',
+                'klab_publication_'.$fieldName,
+                array(
+                    'get_callback'    => function($object, $field_name ){
+                        return get_post_meta( $object[ 'id' ], $field_name, true );
+                    },
+                    'update_callback' => function($value, $object, $field_name ){
+                        return update_post_meta( $object->ID, $field_name, $value );
+                    },
+                    'schema'          => null,
+                )
+            );
+        }
+    }
+
+
+    public function klab_addWelcomePanel () {
+        $authorName = "klefstrom+j";
+
+        echo '<div class="welcome-panel-content">';
+        echo '<h2> Fetch publications </h2>';
+        echo '<p class="about-description"> Fetch publications from pubmed and add them to the site. </p>';
+        echo '<div class="welcome-panel-column">';
+        echo '<h3>Search by author</h3>';
+        echo '<input class="klab_publication_author" value="'. $authorName .'"/><br/>';
+        echo '<button class="button button-primary button-hero load-customize hide-if-no-customize" id="klab_fetchPublications">Fetch publications</button>';
+
+        echo '<p>If you need to re-fetch a publication for some reason, delete it from the publications and empty the trash bin. The fetcher has not been tested using very large resultsets. </p>';
+        echo '</div></div>';
+
+        echo '<div data-remodal-id="modal" class="klab_fetchPublicationsModal">
+	          <button data-remodal-action="close" class="remodal-close"></button>
+              <h2 class="klab_modalTitle">Fetching new data from pubmed</h2>  
+              <div class="klab_modalContents"></div>
+                </div>';
+    }
+
+
 }

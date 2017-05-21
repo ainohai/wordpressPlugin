@@ -10,7 +10,7 @@ class KlabBaseFunctionalities_publication extends klabCustomPostType
 {
     const SLUG = 'klab_publication';
 
-    protected static function createPostType()
+    protected function createPostType()
     {
         $labels = array(
         	'show_in_rest' => true,
@@ -40,10 +40,10 @@ class KlabBaseFunctionalities_publication extends klabCustomPostType
     }
 
 
-    protected static function setTaxonomies() {
+    protected function setTaxonomies() {
         return;
     }
-    protected static function createMetaboxes() {
+    protected function createMetaboxes() {
     	 
         /*"25081398": {
             "uid": "25081398",
@@ -125,6 +125,7 @@ class KlabBaseFunctionalities_publication extends klabCustomPostType
             "sortfirstauthor": "Villarraga HR",
             "vernaculartitle": ""
         },*/
+
         $publicationDetailsMetaboxProps = (object) [
             'metaboxTitle' => 'Publication details',
             'metaboxId' => 'klab_publicationDetails',
@@ -159,13 +160,13 @@ class KlabBaseFunctionalities_publication extends klabCustomPostType
                             'type' => 'text',
                         ]
                     ],
-                    (object) [
+                    /*(object) [
                         'inputId' => 'publicationDetails',
                         'inputLabelText' => 'Publication details',
                         'inputAttributes' => (object) [
                             'type' => 'text',
                         ]
-                    ],
+                    ],*/
                     (object) [
                         'inputId' => 'volume',
                         'inputLabelText' => 'Volume',
@@ -249,45 +250,27 @@ class KlabBaseFunctionalities_publication extends klabCustomPostType
                 )
         ];
 
+        $selectedPubsMetaBoxProps = (object) [
+            'metaboxTitle' => 'Selected publications',
+            'metaboxId' => 'selectedPubMetaBox',
+            'nonceName' => 'selectedPubNonce',
+            'inputFields' =>
+                array(
+                    (object) [
+                        'inputAttributes' => (object) [
+                            'type' => 'checkbox',
+                        ],
+                        'inputId' => 'selectedPublication',
+                        'inputLabelText' => 'this is a selected publication'
+                    ]
+                )
+        ];
+
+        parent::createMetaBox($selectedPubsMetaBoxProps, STATIC::SLUG);
         parent::createMetaBox($publicationDetailsMetaboxProps, STATIC::SLUG);
-        parent::createMetaBox($abstractMetaBoxProps, STATIC::SLUG);
+        //parent::createMetaBox($abstractMetaBoxProps, STATIC::SLUG);
+
         $addBoxes = 'add_meta_boxes_'.STATIC::SLUG;
-        add_action('edit_form_top', 'KlabBaseFunctionalities_publication::init_fetch_publications');
-        
-        add_action( 'rest_api_init', function(){
-        	$array = array("authors", "source", "uid", "pubdate", "volume", "issue", "pages", "fulljournalname", "booktitle", "medium", "edition", "publisherlocation", "publishername");
-        	 
-        	foreach ($array as $fieldName) {
-        		register_rest_field( 'klab_publication',
-        				'klab_publication_'.$fieldName,
-        				array(
-        						'get_callback'    => function($object, $field_name ){
-        						return get_post_meta( $object[ 'id' ], $field_name, true );
-        						},
-        						'update_callback' => function($value, $object, $field_name ){
-        						return update_post_meta( $object->ID, $field_name, $value );
-        						},
-        						'schema'          => null,
-        						)
-        				);
-        	}
-        });
 
     }
-    
-
-    public static function init_fetch_publications(){
-    	
-    	
-    	
-    	wp_enqueue_script( 'session', plugins_url( '/klabBaseFunctionalities-admin.js', __FILE__ ), array('jquery'), '1.0', true );
-	   	wp_localize_script( 'session', 'session', array(
-    			'current_user_id' => get_current_user_id(),
-    			'root' => esc_url_raw( rest_url() ),
-    			'nonce' => wp_create_nonce( 'wp_rest' ),
-    	));
-
-     	echo '<p onclick="fetch_publications_by_auth()">Hae julkaisuja</p>';
-    }
-    
 }

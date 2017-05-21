@@ -11,7 +11,7 @@ class KlabBaseFunctionalities_research_topic extends klabCustomPostType
     const SLUG = 'klab_research_topic';
     const POST_TITLE_HINT = "Insert title for research topic.";
 
-    protected static function createPostType()
+    protected function createPostType()
     {
         $labels = array(
             'name'               => _x( 'Research topics', 'post type general name', 'klab' ),
@@ -32,15 +32,15 @@ class KlabBaseFunctionalities_research_topic extends klabCustomPostType
         $supports = array( 'title', 'editor', 'thumbnail', 'page-attributes');
         parent::createPostTypeUsingConstructor(static::SLUG, $labels, $supports, static::POST_TITLE_HINT);
 
-        add_action( 'edit_form_after_title', 'KlabBaseFunctionalities_research_topic::klab_researchTopic_topicForEditor_cb' );
+        add_action( 'edit_form_after_title', array($this, 'KlabBaseFunctionalities_research_topic::klab_researchTopic_topicForEditor_cb' ));
 
 
     }
 
-    protected static function setTaxonomies() {
+    protected function setTaxonomies() {
         return;
     }
-    protected static function createMetaboxes() {
+    protected function createMetaboxes() {
 
         $detailMetaBoxProps = (object) [
             'metaboxTitle' => 'Research topic in detail',
@@ -62,7 +62,7 @@ class KlabBaseFunctionalities_research_topic extends klabCustomPostType
         return;
     }
 
-    public static function klab_researchTopic_topicForEditor_cb() {
+    public function klab_researchTopic_topicForEditor_cb() {
             global $post;
             if(!empty($post) && STATIC::SLUG === $post->post_type) {
 

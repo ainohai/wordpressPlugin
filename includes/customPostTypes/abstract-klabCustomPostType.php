@@ -2,13 +2,13 @@
 /**Abstract base class for creating custom post types **/
 abstract class klabCustomPostType
 {
-    public static function initiate() {
-        static::createPostType();
-        static::setTaxonomies();
-        static::createMetaboxes();
+    public function initiate() {
+        $this->createPostType();
+        $this->setTaxonomies();
+        $this->createMetaboxes();
     }
 
-    protected static function createPostTypeUsingConstructor($slug, $labels, $supports = null, $titleHint =null, $removedFields = null)
+    protected function createPostTypeUsingConstructor($slug, $labels, $supports = null, $titleHint =null, $removedFields = null)
     {
         $postTypeConstructor = new KlabBaseFunctionalities_CustomPostTypeConstructor($slug);
         $postTypeConstructor->initiateUsingDefaultArgs($slug, $labels, $supports);
@@ -33,15 +33,15 @@ abstract class klabCustomPostType
         }
     }
 
-    protected static function createMetaBox ($metaBoxProps, $postTypeName) {
+    protected function createMetaBox ($metaBoxProps, $postTypeName) {
         $metaBoxConstructor = new Klab_metaBoxConstructor($metaBoxProps, $postTypeName);
         $metaBoxConstructor->createAndSaveMetas();
 
     }
 
-    abstract protected static function createPostType();
-    abstract protected static function setTaxonomies();
-    abstract protected static function createMetaboxes();
+    abstract protected function createPostType();
+    abstract protected function setTaxonomies();
+    abstract protected function createMetaboxes();
 
 }
 

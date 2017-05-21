@@ -139,7 +139,7 @@ class KlabBaseFunctionalities {
         require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/customPostTypes/class-klabBaseFunctionalities_researchTopic.php';
         require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/customPostTypes/class-klabBaseFunctionalities_labPicSlider.php';
         require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/customPostTypes/class-klabBaseFunctionalities_intraLinks.php';
-
+        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/customPostTypes/class-klabBaseFunctionalities_inMedia.php';
 
         /* customizing metaboxes for page templates */
         require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/utils/PageTemplateUtil.php';
@@ -182,6 +182,11 @@ class KlabBaseFunctionalities {
         //Removing posts and comments from admin menu
         $this->loader->add_action( 'admin_menu', $plugin_admin, 'remove_top_level_menus' );
 
+        $this->loader->add_action('edit_form_top', $plugin_admin, 'init_fetch_publications');
+
+        $this->loader->add_action( 'rest_api_init', $plugin_admin, 'init_pub_rest_api');
+
+        $this->loader->add_action( 'welcome_panel', $plugin_admin, 'klab_addWelcomePanel');
 	}
 
 	/**
@@ -208,12 +213,20 @@ class KlabBaseFunctionalities {
 	public function run() {
 
 	    //Add custom post types
-        KlabBaseFunctionalities_news::initiate();
-        KlabBaseFunctionalities_publication::initiate();
-        KlabBaseFunctionalities_lab_member::initiate();
-        KlabBaseFunctionalities_research_topic::initiate();
-        KlabBaseFunctionalities_lab_slideshow::initiate();
-        KlabBaseFunctionalities_intraLinks::initiate();
+        $news = new KlabBaseFunctionalities_news();
+        $news->initiate();
+        $publication = new KlabBaseFunctionalities_publication();
+        $publication->initiate();
+        $labMember = new KlabBaseFunctionalities_lab_member();
+        $labMember->initiate();
+        $researchTopic = new KlabBaseFunctionalities_research_topic();
+        $researchTopic->initiate();
+        $labSlideShow =  new KlabBaseFunctionalities_lab_slideshow();
+        $labSlideShow->initiate();
+        $intraLinks = new KlabBaseFunctionalities_intraLinks();
+        $intraLinks->initiate();
+        $inMedia = new KlabBaseFunctionalities_inMedia();
+        $inMedia->initiate();
 
         PageTemplateUtil::addTemplateMetaboxes();
 

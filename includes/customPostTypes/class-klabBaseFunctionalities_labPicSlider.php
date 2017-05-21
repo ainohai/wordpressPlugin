@@ -11,7 +11,7 @@ class KlabBaseFunctionalities_lab_slideshow extends klabCustomPostType
     const SLUG = 'klab_lab_slideshow';
     const POST_TITLE_HINT = 'Insert title here';
 
-    protected static function createPostType()
+    protected function createPostType()
     {
         $labels = array(
             'name'               => _x( 'Lab slideshow pics', 'post type general name', 'klab' ),
@@ -35,7 +35,7 @@ class KlabBaseFunctionalities_lab_slideshow extends klabCustomPostType
 
     }
 
-    protected static function createMetaboxes() {
+    protected function createMetaboxes() {
         $labSlideshowOrderMetaBoxProps = (object) [
             'metaboxTitle' => 'Slide order',
             'metaboxId' => 'labSlideShowOrder',
@@ -58,7 +58,7 @@ class KlabBaseFunctionalities_lab_slideshow extends klabCustomPostType
     }
 
 
-    protected static function setTaxonomies()
+    protected function setTaxonomies()
     {
         return;
     }

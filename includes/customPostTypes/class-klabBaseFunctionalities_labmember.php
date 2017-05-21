@@ -11,7 +11,7 @@ class KlabBaseFunctionalities_lab_member extends klabCustomPostType
     const SLUG = 'klab_lab_member';
     const POST_TITLE_HINT = 'Insert name here';
 
-    protected static function createPostType()
+    protected function createPostType()
     {
         $labels = array(
             'name'               => _x( 'Lab members', 'post type general name', 'klab' ),
@@ -35,9 +35,9 @@ class KlabBaseFunctionalities_lab_member extends klabCustomPostType
 
     }
 
-    protected static function createMetaboxes() {
+    protected function createMetaboxes() {
         $labMemberMetaBoxProps = (object) [
-            'metaboxTitle' => 'Lab member title',
+            'metaboxTitle' => 'Lab member title and current position',
             'metaboxId' => 'labMemberTitle',
             'nonceName' => 'labMemberTitleNonce',
             'inputFields' =>
@@ -48,6 +48,13 @@ class KlabBaseFunctionalities_lab_member extends klabCustomPostType
                         ],
                         'inputId' => 'klabMemberTitle',
                         'inputLabelText' => 'Title'
+                    ],
+                    (object) [
+                        'inputAttributes' => (object) [
+                            'type' => 'text',
+                        ],
+                        'inputId' => 'klabMemberCurrentPosition',
+                        'inputLabelText' => 'Current position (for alumni)'
                     ]
                 )
         ];
@@ -73,13 +80,13 @@ class KlabBaseFunctionalities_lab_member extends klabCustomPostType
     }
 
 
-    protected static function setTaxonomies()
+    protected function setTaxonomies()
     {
-        add_action('init', array('KlabBaseFunctionalities_lab_member', 'create_labMemberPosition_taxonomy_cb'), 0);
+        add_action('init', array($this, 'create_labMemberPosition_taxonomy_cb'), 0);
         return;
     }
 
-    public static function create_labMemberPosition_taxonomy_cb()
+    public function create_labMemberPosition_taxonomy_cb()
     {
 
         $labels = array(

@@ -130,7 +130,8 @@ add_action( 'edit_form_after_title', 'my_run_excerpt_meta_box' );
 
         foreach ($this->metaBoxProps->inputFields as $input) {
 
-            $this->klab_saveBoxMeta($post_id, $this->nonceName, $input->inputId, $this->postTypeName);
+            $isCheckbox = $input->inputAttributes->type === 'checkbox';
+            $this->klab_saveBoxMeta($post_id, $this->nonceName, $input->inputId, $this->postTypeName, $isCheckbox);
 
         }
     }
@@ -138,7 +139,7 @@ add_action( 'edit_form_after_title', 'my_run_excerpt_meta_box' );
     /**
      * Saves the custom meta input
      */
-    private static function klab_saveBoxMeta( $post_id, $nonceName, $metaIdWoPrefix, $postTypeName ) {
+    private static function klab_saveBoxMeta( $post_id, $nonceName, $metaIdWoPrefix, $postTypeName, $isCheckbox) {
 
         $metaId = $postTypeName . "_" . $metaIdWoPrefix;
         // Checks save status
@@ -155,6 +156,9 @@ add_action( 'edit_form_after_title', 'my_run_excerpt_meta_box' );
 
             //update_post_meta( $post_id, $metaId, sanitize_text_field( $_POST[$metaId] ) );
             update_post_meta( $post_id, $metaId, stripslashes( $_POST[$metaId] ) );
+        }
+        else if ($isCheckbox) {
+            delete_post_meta( $post_id, $metaId);
         }
 
     }

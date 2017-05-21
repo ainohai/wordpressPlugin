@@ -11,7 +11,7 @@ class KlabBaseFunctionalities_intraLinks extends klabCustomPostType
     const SLUG = 'klab_intra_links';
     const POST_TITLE_HINT = 'Insert link title here';
 
-    protected static function createPostType()
+    protected function createPostType()
     {
         $labels = array(
             'name'               => _x( 'Intra links', 'post type general name', 'klab' ),
@@ -33,10 +33,10 @@ class KlabBaseFunctionalities_intraLinks extends klabCustomPostType
         parent::createPostTypeUsingConstructor(static::SLUG, $labels, $supports, static::POST_TITLE_HINT, null);
     }
 
-    protected static function setTaxonomies() {
+    protected function setTaxonomies() {
         return;
     }
-    protected static function createMetaboxes() {
+    protected function createMetaboxes() {
         $urlMetaBoxProps = (object) [
             'metaboxTitle' => 'Link url',
             'metaboxId' => 'linkUrl',
