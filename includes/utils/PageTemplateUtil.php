@@ -13,11 +13,13 @@ class PageTemplateUtil
     const BIO_PAGE_TEMPLATE_NAME = "template-bio.php";
     const POST_TYPE_NAME = "page";
     const THREE_COLUMN_PAGE_TEMPLATE_NAME = "template-three-column.php";
+    const PUBLICATIONS_TEMPLATE_NAME = "template-publications.php";
 
     public static function addTemplateMetaboxes()
     {
         STATIC::bioMetaBoxes();
 		STATIC::threeColumnMetaBoxes();
+        STATIC::publicationsMetaBoxes();
 
         add_action( 'edit_form_after_title', 'PageTemplateUtil::klab_pageTemplate_topicForEditor_cb' );
 
@@ -25,8 +27,8 @@ class PageTemplateUtil
 
     public static function threeColumnMetaBoxes() {
         $secondColumnMetaBoxProps = (object)[
-            'metaboxTitle' => 'Second column',
-            'metaboxId' => 'secondColumn',
+            'metaboxTitle' => 'SecondColumn',
+            'metaboxId' => 'secondColummn',
             'nonceName' => 'secondColumnNonce',
             'inputFields' =>
                 array(
@@ -42,7 +44,7 @@ class PageTemplateUtil
 
         $thirdColumnMetaBoxProps = (object)[
             'metaboxTitle' => 'Third column',
-            'metaboxId' => 'thirdColumn',
+            'metaboxId' => 'thirdColummn',
             'nonceName' => 'thirdColumnNonce',
             'inputFields' =>
                 array(
@@ -55,6 +57,7 @@ class PageTemplateUtil
                     ]
                 )
         ];
+
 
         $secondColMetaBox = new Klab_metaBoxConstructor($secondColumnMetaBoxProps, static::POST_TYPE_NAME, static::THREE_COLUMN_PAGE_TEMPLATE_NAME);
         $secondColMetaBox->createAndSaveMetas();
@@ -87,6 +90,50 @@ class PageTemplateUtil
 
     }
 
+    public static function publicationsMetaBoxes() {
+
+        $fullPubsListMetaBoxProps = (object)[
+            'metaboxTitle' => 'Full publications list info',
+            'metaboxId' => 'fullPubssListInfo',
+            'nonceName' => 'fullPubsListInfoNonce',
+            'inputFields' =>
+                array(
+                    (object)[
+                        'inputAttributes' => (object)[
+                            'type' => 'textarea',
+                        ],
+                        'inputId' => 'fullPubsListInfo',
+                        'inputLabelText' => 'Text before full list'
+                    ]
+                )
+        ];
+
+        $selectedPubsListMetaBoxProps = (object)[
+            'metaboxTitle' => 'Selected publications list info',
+            'metaboxId' => 'selectedPubssListInfo',
+            'nonceName' => 'selectedPubsListInfoNonce',
+            'inputFields' =>
+                array(
+                    (object)[
+                        'inputAttributes' => (object)[
+                            'type' => 'textarea',
+                        ],
+                        'inputId' => 'selectedPubsListInfo',
+                        'inputLabelText' => 'Text before selected pubs list'
+                    ]
+                )
+        ];
+
+
+        $metaBoxConstructor = new Klab_metaBoxConstructor($selectedPubsListMetaBoxProps, static::POST_TYPE_NAME, static::PUBLICATIONS_TEMPLATE_NAME);
+        $metaBoxConstructor->createAndSaveMetas();
+
+        $metaBoxConstructor = new Klab_metaBoxConstructor($fullPubsListMetaBoxProps, static::POST_TYPE_NAME, static::PUBLICATIONS_TEMPLATE_NAME);
+        $metaBoxConstructor->createAndSaveMetas();
+
+    }
+
+
     public static function klab_pageTemplate_topicForEditor_cb() {
         global $post;
         $currentPageTemplate = get_post_meta( $post->ID, '_wp_page_template', true );
@@ -98,6 +145,7 @@ class PageTemplateUtil
         if (!empty($post) && STATIC::POST_TYPE_NAME === $post->post_type && $currentPageTemplate === STATIC::THREE_COLUMN_PAGE_TEMPLATE_NAME) {
             echo '<div class="editorTitle"><h3>First column:</h3></div>';
         }
+
     }
 
 

@@ -40,7 +40,7 @@ class KlabBaseFunctionalities_intraLinks extends klabCustomPostType
         $urlMetaBoxProps = (object) [
             'metaboxTitle' => 'Link url',
             'metaboxId' => 'linkUrl',
-            'nonceName' => 'linkUrl',
+            'nonceName' => 'linkUrlNonce',
             'inputFields' =>
                 array(
                     (object) [
@@ -52,7 +52,7 @@ class KlabBaseFunctionalities_intraLinks extends klabCustomPostType
                     ]
                 )
         ];
-        parent::createMetaBox($urlMetaBoxProps, STATIC::SLUG);
+        parent::createMetaBox($urlMetaBoxProps, static::SLUG);
         return;
     }
 }

@@ -96,8 +96,9 @@ class KlabBaseFunctionalities_Admin {
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
+        wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/klabNewsLink-admin.js', array( 'jquery' ), $this->version, false );
 
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/klabBaseFunctionalities-admin.js', array( 'jquery' ), $this->version, false );
+        wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/klabPubFunctionalities-admin.js', array( 'jquery' ), $this->version, false );
         wp_localize_script( $this->plugin_name, 'session', array(
             'current_user_id' => get_current_user_id(),
             'root' => esc_url_raw( rest_url() ),
@@ -105,25 +106,11 @@ class KlabBaseFunctionalities_Admin {
         ));
         wp_enqueue_script( 'remodal/js',  plugin_dir_url( __FILE__ ) . '../bower_components/remodal/dist/remodal.min.js', array( 'jquery' ), $this->version, false );
 
-        //echo plugin_dir_url( __FILE__ ) . '../bower_components/remodal/dist/remodal.min.js';
-
     }
 
 	public function remove_top_level_menus () {
         remove_menu_page( 'edit.php' );                   //Posts
         remove_menu_page( 'edit-comments.php' );          //Comments
-    }
-
-    public function init_fetch_publications(){
-
-        //wp_enqueue_script( 'session', plugins_url( '/klabBaseFunctionalities-admin.js', __FILE__ ), array('jquery'), '1.0', true );
-        /*wp_localize_script( 'session', 'session', array(
-            'current_user_id' => get_current_user_id(),
-            'root' => esc_url_raw( rest_url() ),
-            'nonce' => wp_create_nonce( 'wp_rest' ),
-        ));
-
-        echo '<p onclick="fetch_publications_by_auth()">Hae julkaisuja</p>';*/
     }
 
     public function init_pub_rest_api(){

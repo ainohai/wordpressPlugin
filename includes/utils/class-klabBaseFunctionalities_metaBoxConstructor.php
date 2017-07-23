@@ -102,7 +102,6 @@ add_action( 'edit_form_after_title', 'my_run_excerpt_meta_box' );
 
     public function klabMetaConstructor_addMetaboxes_cb($post)
     {
-
         MetaboxUtil::echoNonce($this->nonceName);
         foreach ($this->metaBoxProps->inputFields as $input) {
 

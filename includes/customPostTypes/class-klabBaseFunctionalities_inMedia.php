@@ -8,6 +8,8 @@
  */
 class KlabBaseFunctionalities_inMedia extends klabCustomPostType
 {
+    const SLUG = 'klab_lab_in_media';
+
     protected function createPostType()
     {
         $labels = array(
@@ -26,14 +28,72 @@ class KlabBaseFunctionalities_inMedia extends klabCustomPostType
             'not_found'          => __( 'No Lab in media items found.', 'klab' ),
             'not_found_in_trash' => __( 'No Lab in media items found in Trash.', 'klab' )
         );
-        $postConstructor = new KlabBaseFunctionalities_CustomPostTypeConstructor('klab_labInMedia');
-        $postConstructor->initiateUsingDefaultArgs('klab_labInMedia', $labels, array('title', 'editor', 'thumbnail', 'page-attributes'));
+        $supports = array('title', 'editor', 'page-attributes');
+        parent::createPostTypeUsingConstructor(static::SLUG, $labels, $supports, null, null);
+        add_action( 'edit_form_after_title', array($this, 'add_fetch_button_cb') );
+
     }
 
     protected function setTaxonomies() {
         return;
     }
     protected function createMetaboxes() {
-        return;
+        $inMediaMetaBoxProps = (object) [
+            'metaboxTitle' => 'News in media',
+            'metaboxId' => 'newsInMedia',
+            'nonceName' => 'newsInMediaNonce',
+            'inputFields' =>
+                array(
+                    (object) [
+                        'inputAttributes' => (object) [
+                            'type' => 'text',
+                        ],
+                        'inputId' => 'klabInMediaUrl',
+                        'inputLabelText' => 'Url'
+                    ]
+
+                )
+        ];
+
+        $inMediaDescMetaBoxProps = (object) [
+            'metaboxTitle' => 'News in media excerpt',
+            'metaboxId' => 'klabInMediaDesc',
+            'nonceName' => 'klabInMediaDescNonce',
+            'inputFields' =>
+                array(
+                    (object) [
+                        'inputAttributes' => (object) [
+                            'type' => 'text',
+                        ],
+                        'inputId' => 'klabInMediaTitle',
+                        'inputLabelText' => 'News title'
+                    ]
+                )
+        ];
+
+        $inMediaMediaUrlMetaBoxProps = (object) [
+            'metaboxTitle' => 'News in media excerpt',
+            'metaboxId' => 'klabInMediaMediaUrlBox',
+            'nonceName' => 'klabInMediaMediaUrlNonce',
+            'inputFields' =>
+                array(
+                    (object) [
+                        'inputAttributes' => (object) [
+                            'type' => 'text',
+                        ],
+                        'inputId' => 'klabInMediaMediaUrl',
+                        'inputLabelText' => 'External media url'
+                    ]
+                )
+        ];
+
+        parent::createMetaBox($inMediaMetaBoxProps, static::SLUG);
+        parent::createMetaBox($inMediaDescMetaBoxProps, static::SLUG);
+        parent::createMetaBox($inMediaMediaUrlMetaBoxProps, static::SLUG);
     }
+
+    public function add_fetch_button_cb(){
+        echo '<button id="inMediaFetchButton" name="inMediaFetchButton" value="Fetch news via url"/>
+        
+}
 }
