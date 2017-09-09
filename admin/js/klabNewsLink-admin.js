@@ -6,7 +6,7 @@
         jQuery("klab_in_media_fetch_url").val('#klab_lab_in_media_klabInMedia_url');
 
         $("#klab_inMediaFetchButton").click(function () {
-
+            console.log("there");
             var url =  document.getElementById("klab_in_media_fetch_url").value;
 
             event.preventDefault();

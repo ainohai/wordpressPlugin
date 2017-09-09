@@ -13,7 +13,7 @@ class KlabBaseFunctionalities_publication extends klabCustomPostType
     protected function createPostType()
     {
         $labels = array(
-        	'show_in_rest' => true,
+            'show_in_rest' => true,
             'name'               => _x( 'Publications', 'post type general name', 'klab' ),
             'singular_name'      => _x( 'Publication', 'post type singular name', 'klab' ),
             'menu_name'          => _x( 'Publications', 'admin menu', 'klab' ),
@@ -44,7 +44,7 @@ class KlabBaseFunctionalities_publication extends klabCustomPostType
         return;
     }
     protected function createMetaboxes() {
-    	 
+
         /*"25081398": {
             "uid": "25081398",
             "pubdate": "2014 Jul-Aug",
@@ -268,9 +268,27 @@ class KlabBaseFunctionalities_publication extends klabCustomPostType
 
         parent::createMetaBox($selectedPubsMetaBoxProps, STATIC::SLUG);
         parent::createMetaBox($publicationDetailsMetaboxProps, STATIC::SLUG);
-        //parent::createMetaBox($abstractMetaBoxProps, STATIC::SLUG);
 
-        $addBoxes = 'add_meta_boxes_'.STATIC::SLUG;
+        add_action( 'rest_api_init', function(){
+            $array = array("authors", "source", "uid", "pubdate", "volume", "issue", "pages", "fulljournalname", "booktitle", "medium", "edition", "publisherlocation", "publishername");
+
+            error_log("pubsapi");
+            foreach ($array as $fieldName) {
+                register_rest_field( 'klab_publication',
+                    'klab_publication_'.$fieldName,
+                    array(
+                        'get_callback'    => function($object, $field_name ){
+                            return get_post_meta( $object[ 'id' ], $field_name, true );
+                        },
+                        'update_callback' => function($value, $object, $field_name ){
+                            return update_post_meta( $object->ID, $field_name, $value );
+                        },
+                        'schema'          => null,
+                    )
+                );
+            }
+        });
 
     }
+
 }

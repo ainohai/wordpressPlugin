@@ -96,10 +96,10 @@ class KlabBaseFunctionalities_Admin {
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
-        wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/klabNewsLink-admin.js', array( 'jquery' ), $this->version, false );
+        wp_enqueue_script( $this->plugin_name.'-news', plugin_dir_url( __FILE__ ) . 'js/klabNewsLink-admin.js', array( 'jquery' ), $this->version, false );
 
-        wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/klabPubFunctionalities-admin.js', array( 'jquery' ), $this->version, false );
-        wp_localize_script( $this->plugin_name, 'session', array(
+        wp_enqueue_script( $this->plugin_name.'-pubs', plugin_dir_url( __FILE__ ) . 'js/klabPubFunctionalities-admin.js', array( 'jquery' ), $this->version, false );
+        wp_localize_script( $this->plugin_name.'-pubs', 'session', array(
             'current_user_id' => get_current_user_id(),
             'root' => esc_url_raw( rest_url() ),
             'nonce' => wp_create_nonce( 'wp_rest' ),
@@ -112,26 +112,6 @@ class KlabBaseFunctionalities_Admin {
         remove_menu_page( 'edit.php' );                   //Posts
         remove_menu_page( 'edit-comments.php' );          //Comments
     }
-
-    public function init_pub_rest_api(){
-        $array = array("authors", "source", "uid", "pubdate", "volume", "issue", "pages", "fulljournalname", "booktitle", "medium", "edition", "publisherlocation", "publishername");
-
-        foreach ($array as $fieldName) {
-            register_rest_field( 'klab_publication',
-                'klab_publication_'.$fieldName,
-                array(
-                    'get_callback'    => function($object, $field_name ){
-                        return get_post_meta( $object[ 'id' ], $field_name, true );
-                    },
-                    'update_callback' => function($value, $object, $field_name ){
-                        return update_post_meta( $object->ID, $field_name, $value );
-                    },
-                    'schema'          => null,
-                )
-            );
-        }
-    }
-
 
     public function klab_addWelcomePanel () {
         $authorName = "klefstrom+j";

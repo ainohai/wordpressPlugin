@@ -3,8 +3,9 @@
 
 	$(function() {
 
-		$("#klab_fetchPublications").click(function () {
-
+		$("#klab_fetchPublications").click(function (event) {
+			event.preventDefault();
+			console.log("here");
 			 klabPublicationModal.openModal();
 
 		});
@@ -36,29 +37,40 @@ function fetch_publications_by_auth(){
 
 function getCurrentEntriesAndFetchNew(page, array){
 
+	console.log("here4");
+
 	var author = document.getElementsByClassName("klab_publication_author");
 	var publicationApiUrl ="https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pubmed&retmode=json&id=";
 	var searchUrl="https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&retmode=json&retmax=1000&term=" + author[0].value + "[Author]+OR+" + author[0].value +"[Investigator]";
 
+	var url =  session.root + 'wp/v2/klab_publication?per_page=100&page='+page;
+	console.log("url:" +url);
+	var url =  session.root + 'wp/v2/klab_publication?per_page=100&page='+page;
 	jQuery.get({
-		url: session.root + 'wp/v2/klab_publication?per_page=100&page='+page,
+		url: url,
 		beforeSend: function ( xhr ) {
 			//console.log( session.nonce );
 			xhr.setRequestHeader( 'X-WP-Nonce', session.nonce );
 		}
 
 	}).fail(function(data, error, fail){
-		console.log('ajax failed' + data + error + fail)
+		if(array.length > 0) {
+			fetchListOfNewPublications(array, searchUrl, publicationApiUrl);
+		}
+		else {
+			alert("Fetching existing publications failed.")
+		}
 	})
 	.always(function(){
 		console.log('ajax done');
 	})
 	.done(function(getResult){
+		console.log("dindindin");
+		console.log(getResult);
 		for (var i=0; i< getResult.length; i++){
 			array.push(getResult[i].klab_publication_uid);
 		}
 		if (getResult.length==0){
-
 			fetchListOfNewPublications(array, searchUrl, publicationApiUrl);
 
 		}
@@ -149,7 +161,9 @@ var klabPublicationModal = {
 
 	openModal: function () {
 		var inst = jQuery('[data-remodal-id=modal]').remodal({closeOnConfirm:false});
+		console.log("here");
 		inst.open();
+		console.log("here");
 		fetch_publications_by_auth();
 	},
 	closeModal: function () {

@@ -182,8 +182,6 @@ class KlabBaseFunctionalities {
         //Removing posts and comments from admin menu
         $this->loader->add_action( 'admin_menu', $plugin_admin, 'remove_top_level_menus' );
 
-        $this->loader->add_action( 'rest_api_init', $plugin_admin, 'init_pub_rest_api');
-
         $this->loader->add_action( 'welcome_panel', $plugin_admin, 'klab_addWelcomePanel');
 
 	}
