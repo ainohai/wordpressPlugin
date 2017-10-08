@@ -70,7 +70,7 @@ function getCurrentEntriesAndFetchNew(page, array){
 		for (var i=0; i< getResult.length; i++){
 			array.push(getResult[i].klab_publication_uid);
 		}
-		if (getResult.length==0){
+		if (getResult.length==0 || page > 5){
 			fetchListOfNewPublications(array, searchUrl, publicationApiUrl);
 
 		}

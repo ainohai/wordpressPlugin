@@ -113,6 +113,25 @@ class KlabBaseFunctionalities_Admin {
         remove_menu_page( 'edit-comments.php' );          //Comments
     }
 
+    public function init_pub_rest_api(){
+        $array = array("authors", "source", "uid", "pubdate", "volume", "issue", "pages", "fulljournalname", "booktitle", "medium", "edition", "publisherlocation", "publishername");
+
+        foreach ($array as $fieldName) {
+            register_rest_field( 'klab_publication',
+                'klab_publication_'.$fieldName,
+                array(
+                    'get_callback'    => function($object, $field_name ){
+                        return get_post_meta( $object[ 'id' ], $field_name, true );
+                    },
+                    'update_callback' => function($value, $object, $field_name ){
+                        return update_post_meta( $object->ID, $field_name, $value );
+                    },
+                    'schema'          => null,
+                )
+            );
+        }
+    }
+
     public function klab_addWelcomePanel () {
         $authorName = "klefstrom+j";
 

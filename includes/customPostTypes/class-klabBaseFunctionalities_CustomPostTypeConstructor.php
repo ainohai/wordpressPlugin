@@ -10,7 +10,7 @@ class KlabBaseFunctionalities_CustomPostTypeConstructor
 {
 
     // default arguments.
-    const DEFAULT_ARGS = [
+    private $default_args = [
         'public' => true,
         'exclude_from_search' => true,
         'show_in_nav_menus' => false,
@@ -51,7 +51,7 @@ class KlabBaseFunctionalities_CustomPostTypeConstructor
 
         if ($useDefaultArgs) {
             //note that when using this as args override settings from defaul_args
-            $args = array_replace(self::DEFAULT_ARGS, $args);
+            $args = array_replace($this->default_args, $args);
         }
         $this->args = $args;
 
